@@ -12,8 +12,8 @@ btn.addEventListener("click", () => {
 
     new QRCode(qrContainer, {
     text: url,
-    width: 256,
-    height: 256
+    width: 512,
+    height: 512
     });
 
 });
