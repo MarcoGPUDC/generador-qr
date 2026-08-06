@@ -7,8 +7,8 @@ const bbdd = window.supabase.createClient(
 );
 
 const params = new URLSearchParams(window.location.search);
-const codigo = params.get("qr");
-//const codigo = window.location.pathname.substring(1);
+//const codigo = params.get("qr");
+const codigo = window.location.pathname.substring(1);
 
 async function redirigir() {
     const { data, error } = await bbdd
