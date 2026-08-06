@@ -5,22 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR generator</title>
     <link rel="stylesheet" href="./public/styles.css">
+    
 </head>
 <body>
-    <h1>Generador QR</h1>
+    <div id="login">
+        <input class="inputLogin" type="text" id="username" placeholder="username">
+        <input class="inputLogin" type="password" id="password" placeholder="password">
+        <button class="btnLogin" id="login-btn">Sign in</button>
+        <button class="btnLogin" id="signup-btn">Sign up</button>
+        <button class="btnLogin" id="logout-btn" style="display: none;">Sign out</button>
+    </div>
+    <div style="display: inline-block; margin-top: 50px;">
+        <h1>Generador QR</h1>
 
-    <input
-    type="text"
-    id="url-input"
-    placeholder="https://ejemplo.com"
-    >
+        <input
+        type="text"
+        id="url-input"
+        placeholder="https://ejemplo.com"
+        >
 
-    <button id="generar-btn">
-        Generar QR
-    </button>
+        <button id="generar-btn">
+            Generar QR
+        </button>
+        <button id="save-qr-btn" style="display: none;">
+            Guardar QR
+        </button>
 
-<div id="qrcode"></div>
+        <div id="qrcode"></div>
+    </div>
+    <div id="singupContainer" style="display: none;">
+        <h3>Sign up</h3>
+        <label for="signup-username">Username:</label>
+        <input type="text" id="signup-username" placeholder="Username">
+        <label for="signup-password">Password:</label>
+        <input type="password" id="signup-password" placeholder="Password">
+        <label for="signup-email">Email:</label>
+        <input type="email" id="signup-email" placeholder="Email">
+        <button id="signup-submit-btn">Sign up</button>
+    </div>
+    <div id="generados-container" style="display: none;">
+        <h3>Generados</h3>
+        <div id="generados-list"></div>
+    </div>
 </body>
 <script src="./public/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./scripts.js"></script>
+<script src="./modules/login.js"></script>
 </html>

@@ -16,3 +16,74 @@ body {
     #qrcode {
       margin-top: 20px;
     }
+
+    #login{
+      display: inline-block;
+      padding-left: 85%;
+    }
+
+    #login *{
+      margin: 3px 0px;
+    }
+
+    .btnLogin {
+      padding: 10px 15px;
+      cursor: pointer;
+      margin-left: 5px;
+      display: inline-block;
+    }
+
+    .inputLogin {
+      width: 150px;
+      padding: 10px;
+      margin-right: 5px;
+    }
+
+    #singupContainer input{
+      display: block;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #singupContainer label{
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-size: 14px;
+    }
+
+    #singupContainer button{
+      padding: 10px 15px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #singupContainer h3{
+      text-align: center;
+      font-size: 24px;
+    }
+
+    li {
+      width: 65%;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #btn-verqr, #btn-eliminar, #btn-editar {
+      padding: 5px 10px;
+      cursor: pointer;
+      background-color: #008CBA;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin-left: 10px;
+    }
