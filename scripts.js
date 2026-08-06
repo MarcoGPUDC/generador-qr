@@ -38,18 +38,19 @@ async function userAllCodes(id) {
 }
 
 async function generarQr(uri) {
+    var url = "";
     qrContainer.innerHTML = "";
     const { data: { session } } = await bbdd.auth.getSession();
     if (session) {
         const codeQr = Math.random().toString(36).substring(2, 10);
-        const url = window.location.pathname + "/?qr=" + codeQr;
+        url = window.location.pathname + "/?qr=" + codeQr;
         new QRCode(qrContainer, {
             text: url,
             width: 512,
             height: 512
         });
     } else {
-        const url = uri;
+        url = uri;
         new QRCode(qrContainer, {
             text: url,
             width: 512,
