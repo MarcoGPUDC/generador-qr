@@ -39,12 +39,14 @@ loginBtn.addEventListener("click", async () => {
         const btnLogout = document.getElementById("logout-btn");
         const btnSingup = document.getElementById("signup-btn");
         const btnSaveQr = document.getElementById("save-qr-btn");
+        const qrContainer = document.getElementById("qrcode");
         btnSingup.style.display = "none";
         btnLogout.style.display = "inline-block";
         btnSaveQr.style.display = "inline-block";
         loginBtn.style.display = "none";
         usernameInput.style.display = "none";
         passwordInput.style.display = "none";
+        qrContainer.innerHTML = "";
         mostrarGenerados(await userAllCodes(data.user.id));
         passwordInput.value = "";
         const btnGuardarQr = document.getElementById("save-qr-btn");
@@ -66,6 +68,7 @@ logoutBtn.addEventListener("click", async () => {
         console.error("Error al cerrar sesión:", error.message)
     } else {
         console.log("Sesión cerrada correctamente")
+
     }
     const btnSingup = document.getElementById("signup-btn");
     const btnLogout = document.getElementById("logout-btn");

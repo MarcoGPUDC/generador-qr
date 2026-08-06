@@ -9,7 +9,6 @@ const bbdd = window.supabase.createClient(
 const params = new URLSearchParams(window.location.search);
 const codigo = params.get("qr");
 //const codigo = window.location.pathname.substring(1);
-console.log(codigo)
 async function redirigir() {
     const { data, error } = await bbdd
         .from("generados")
@@ -38,14 +37,26 @@ async function userAllCodes(id) {
     }
 }
 
-function generarQr(uri) {
+async function generarQr(uri) {
     qrContainer.innerHTML = "";
-    const url = window.location.origin + "/?qr=" + uri;
-    new QRCode(qrContainer, {
-        text: url,
-        width: 512,
-        height: 512
-    });
+    const { data: { session } } = await bbdd.auth.getSession();
+    if (session) {
+        const codeQr = Math.random().toString(36).substring(2, 10);
+        const url = window.location.origin + "/?qr=" + codeQr;
+        new QRCode(qrContainer, {
+            text: url,
+            width: 512,
+            height: 512
+        });
+    } else {
+        const url = uri;
+        new QRCode(qrContainer, {
+            text: url,
+            width: 512,
+            height: 512
+        });
+    }
+    
 
 }
 btn.addEventListener("click", () => {
@@ -100,17 +111,17 @@ async function editarQr(id) {
     }
 };
 
-async function guardarQr(id) {
+async function guardarQr(id, uri) {
     const { data, error } = await bbdd
         .from("generados")
         .insert([
             { 
-                uri: Math.random().toString(36).substring(2, 10), 
+                uri: uri || Math.random().toString(36).substring(2, 10), 
                 user_id: id,
                 url: document.getElementById("url-input").value
             }
             ])
-        .select()
+        .select('uri')
     if (error) {
         console.error(error);
     }else {
