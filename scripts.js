@@ -42,7 +42,7 @@ async function generarQr(uri) {
     const { data: { session } } = await bbdd.auth.getSession();
     if (session) {
         const codeQr = Math.random().toString(36).substring(2, 10);
-        const url = window.location.origin + "/?qr=" + codeQr;
+        const url = window.location.pathname + "/?qr=" + codeQr;
         new QRCode(qrContainer, {
             text: url,
             width: 512,
