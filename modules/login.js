@@ -45,17 +45,11 @@ loginBtn.addEventListener("click", async () => {
         loginBtn.style.display = "none";
         usernameInput.style.display = "none";
         passwordInput.style.display = "none";
-        
         mostrarGenerados(await userAllCodes(data.user.id));
         passwordInput.value = "";
         const btnGuardarQr = document.getElementById("save-qr-btn");
         btnGuardarQr.addEventListener("click", async () => {
             await guardarQr(data.user.id);
-            mostrarGenerados(await userAllCodes(data.user.id));
-        });
-        const btnEliminar = document.getElementById("btn-eliminar");
-        btnEliminar.addEventListener("click", async () => {
-            await eliminarQr(btnEliminar.getAttribute("data-id"));
             mostrarGenerados(await userAllCodes(data.user.id));
         });
     } else {

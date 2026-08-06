@@ -9,7 +9,7 @@ const bbdd = window.supabase.createClient(
 const params = new URLSearchParams(window.location.search);
 //const codigo = params.get("qr");
 const codigo = window.location.pathname.substring(1);
-
+console.log(codigo)
 async function redirigir() {
     const { data, error } = await bbdd
         .from("generados")
@@ -40,7 +40,7 @@ async function userAllCodes(id) {
 
 function generarQr(uri) {
     qrContainer.innerHTML = "";
-    const url = window.location.origin + "/" + uri;
+    const url = window.location.origin + "/?qr=" + uri;
     new QRCode(qrContainer, {
         text: url,
         width: 512,
@@ -62,12 +62,14 @@ function mostrarGenerados(data) {
     const generadosContainer = document.getElementById("generados-container");
     generadosContainer.innerHTML = "";
     const list = document.createElement("ul");
-    data.forEach(item => {
-        const listItem = document.createElement("li");
-        listItem.textContent = `URL: ${item.url}, URI: ${item.uri}`;
-        listItem.innerHTML += `<button id="btn-verqr" onclick="generarQr('${item.uri}')">Ver QR</button> <button id="btn-editar" onclick="editarQr('${item.id}')">Editar</button> <button id="btn-eliminar" data-id="${item.id}">X</button>`;
-        list.appendChild(listItem);
-    });
+    if (data && data.length > 0) {
+        data.forEach(item => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `URL: ${item.url}, URI: ${item.uri}`;
+            listItem.innerHTML += `<button id="btn-verqr" onclick="generarQr('${item.uri}')">Ver QR</button> <button id="btn-editar" onclick="editarQr('${item.id}')">Editar</button> <button id="btn-eliminar" onclick="eliminarQr('${item.id}')">X</button>`;
+            list.appendChild(listItem);
+        });
+    }
     generadosContainer.appendChild(list);
     generadosContainer.style.display = "block";
 }
@@ -121,11 +123,13 @@ async function eliminarQr(id) {
     const { data, error } = await bbdd
         .from("generados")
         .delete()
-        .eq("id", id);
+        .eq("id", id)
+        .select("user_id");
     if (error) {
         console.error(error);
     } else {
         alert("QR eliminado correctamente");
+        mostrarGenerados(await userAllCodes(data[0].user_id));
     }
 }
 
