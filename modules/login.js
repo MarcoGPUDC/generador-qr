@@ -66,9 +66,6 @@ logoutBtn.addEventListener("click", async () => {
 
     if (error) {
         console.error("Error al cerrar sesión:", error.message)
-    } else {
-        console.log("Sesión cerrada correctamente")
-
     }
     const btnSingup = document.getElementById("signup-btn");
     const btnLogout = document.getElementById("logout-btn");

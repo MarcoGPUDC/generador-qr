@@ -1,10 +1,14 @@
 const btn = document.getElementById("generar-btn");
+const btnDinamico = document.getElementById("generar-dinamico-btn");
 const qrContainer = document.getElementById("qrcode"); 
 
 const bbdd = window.supabase.createClient(
     "https://bfxsiqkicxetuwrygtij.supabase.co",
     "sb_publishable_LXqdCSrppPPfRVTX0EmdbQ_TNjOhmNh"
 );
+
+alreadyLogged();
+
 
 const params = new URLSearchParams(window.location.search);
 const codigo = params.get("qr");
@@ -15,7 +19,6 @@ async function redirigir() {
         .select("url")
         .eq("uri", codigo)
         .single();
-
     if (data) {
         window.location.replace(data.url);
     }
@@ -40,25 +43,32 @@ async function userAllCodes(id) {
 async function generarQr(uri) {
     var url = "";
     qrContainer.innerHTML = "";
-    const { data: { session } } = await bbdd.auth.getSession();
-    if (session) {
-        const codeQr = Math.random().toString(36).substring(2, 10);
-        url = window.location.pathname + "/?qr=" + codeQr;
-        new QRCode(qrContainer, {
-            text: url,
-            width: 512,
-            height: 512
-        });
-    } else {
-        url = uri;
-        new QRCode(qrContainer, {
-            text: url,
-            width: 512,
-            height: 512
-        });
-    }
-    
+    const codeQr = Math.random().toString(36).substring(2, 10);
+    url = window.location.pathname + "?qr=" + codeQr;
+    new QRCode(qrContainer, {
+        text: url,
+        width: 512,
+        height: 512
+    });
+    guardarQr(await bbdd.auth.getUser().then(res => res.data.user.id), codeQr);
+}
 
+async function verQr(url) {
+    qrContainer.innerHTML = "";
+    new QRCode(qrContainer, {
+        text: url,
+        width: 512,
+        height: 512
+    });
+}
+
+async function generarQrEstatico(url) {
+    qrContainer.innerHTML = "";
+    new QRCode(qrContainer, {
+        text: url,
+        width: 512,
+        height: 512
+    });
 }
 btn.addEventListener("click", () => {
 
@@ -66,9 +76,23 @@ btn.addEventListener("click", () => {
         .getElementById("url-input")
         .value;
 
-    generarQr(url);
+    generarQrEstatico(url);
 
 });
+
+btnDinamico.addEventListener("click", async () => {
+    const { data: { session } } = await bbdd.auth.getSession();
+    if (session) { 
+        const url = document
+        .getElementById("url-input")
+        .value;
+
+    generarQr(url);
+    } else {
+        alert("Debes iniciar sesión para generar un QR dinámico.");
+    }
+});
+
 
 function mostrarGenerados(data) {
     const generadosContainer = document.getElementById("generados-container");
@@ -76,9 +100,10 @@ function mostrarGenerados(data) {
     const list = document.createElement("ul");
     if (data && data.length > 0) {
         data.forEach(item => {
+            const itemUrl = window.location.pathname + "?qr=" + item.uri;
             const listItem = document.createElement("li");
             listItem.textContent = `URL: ${item.url}, URI: ${item.uri}`;
-            listItem.innerHTML += `<button id="btn-verqr" onclick="generarQr('${item.uri}')">Ver QR</button> <button id="btn-editar" onclick="editarQr('${item.id}')">Editar</button> <button id="btn-eliminar" onclick="eliminarQr('${item.id}')">X</button>`;
+            listItem.innerHTML += `<button id="btn-verqr" onclick="verQr('${itemUrl}')">Ver QR</button> <button id="btn-editar" onclick="editarQr('${item.id}')">Editar</button> <button id="btn-eliminar" onclick="eliminarQr('${item.id}')">X</button>`;
             list.appendChild(listItem);
         });
     }
@@ -146,3 +171,37 @@ async function eliminarQr(id) {
 }
 
 const botonGuardarQr = document.getElementById("save-qr-btn");
+
+async function alreadyLogged() {
+    try {
+    // El await es crucial aquí. Obliga a JS a esperar a que Supabase 
+    // termine de acceder al disco y cargar la información.
+    const { data, error } = await bbdd.auth.getSession();
+
+    if (error) {
+        console.error("Error al obtener sesión:", error);
+        return;
+    }
+
+    if (data.session) {
+        const btnLogout = document.getElementById("logout-btn");
+        const btnSingup = document.getElementById("signup-btn");
+        const btnSaveQr = document.getElementById("save-qr-btn");
+        const qrContainer = document.getElementById("qrcode");
+        const passwordInput = document.getElementById("password");
+        const usernameInput = document.getElementById("username");
+        const loginBtn = document.getElementById("login-btn");
+        btnSingup.style.display = "none";
+        btnLogout.style.display = "inline-block";
+        btnSaveQr.style.display = "inline-block";
+        loginBtn.style.display = "none";
+        usernameInput.style.display = "none";
+        passwordInput.style.display = "none";
+        qrContainer.innerHTML = "";
+        passwordInput.value = "";
+        mostrarGenerados(await userAllCodes(data.session.user.id));
+    }
+    } catch (err) {
+        console.error("Error inesperado:", err);
+    }
+};
