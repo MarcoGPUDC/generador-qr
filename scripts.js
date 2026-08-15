@@ -44,7 +44,7 @@ async function generarQr(uri) {
     var url = "";
     qrContainer.innerHTML = "";
     const codeQr = Math.random().toString(36).substring(2, 10);
-    url = window.location.pathname + "?qr=" + codeQr;
+    url = "https://marcogpudc.github.io/generador-qr/" + "?qr=" + codeQr;
     new QRCode(qrContainer, {
         text: url,
         width: 512,
