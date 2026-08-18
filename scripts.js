@@ -100,7 +100,7 @@ function mostrarGenerados(data) {
     const list = document.createElement("ul");
     if (data && data.length > 0) {
         data.forEach(item => {
-            const itemUrl = window.location.pathname + "?qr=" + item.uri;
+            const itemUrl = "https://marcogpudc.github.io/generador-qr/" + "?qr=" + item.uri;
             const listItem = document.createElement("li");
             listItem.textContent = `URL: ${item.url}, URI: ${item.uri}`;
             listItem.innerHTML += `<button id="btn-verqr" onclick="verQr('${itemUrl}')">Ver QR</button> <button id="btn-editar" onclick="editarQr('${item.id}')">Editar</button> <button id="btn-eliminar" onclick="eliminarQr('${item.id}')">X</button>`;
